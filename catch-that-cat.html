@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Javascript Interactive Fiction/Adventure system</title>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, height=device-height">
+  <style type="text/css">
+	body {
+		Margin: 0; Padding: 0;
+		Background-color: white;
+		Color: black;
+	}
+	#output {
+		Width: 100%; Height: 100%;
+		Padding-bottom: 2em;
+		Overflow: auto;
+	}
+	#input-form {
+		Position: fixed;
+		Left: 0; Bottom: 0;
+		Width: 100%; Height: 2em;
+	}
+	#input { Width: 88%; Height: 2em; }
+	#submit { Width: 10%; Height: 2em; }
+  </style>
+  <script type="text/javascript" src="jaiffa.js"></script>
+  <script type="text/javascript" src="catch-that-cat.js"></script>
+  <script type="text/javascript">
+	window.onload = function () {
+		var parser = new jaiffa.VerbObjectParser(jaiffa._STORY);
+		jaiffa._STORY.start();
+		jaiffa._STORY.advance();
+
+		for (var i = 0; i < jaiffa.output_buffer.length; i++)
+			document.getElementById("output").innerHTML +=
+				"<p>" + jaiffa.output_buffer[i] + "</p>";
+		document.getElementById("output").lastChild
+			.scrollIntoView();
+		document.getElementById("output").scrollIntoView(false);
+
+		document.getElementById('input-form').onsubmit = function() {
+			jaiffa.output_buffer.length = 0;
+			parser.parse(document.getElementById('input').value);
+			document.getElementById('input').value = "";
+			jaiffa._STORY.advance();
+
+			for (var i = 0; i < jaiffa.output_buffer.length; i++)
+				document.getElementById("output").innerHTML +=
+					"<p>" + jaiffa.output_buffer[i] + "</p>";
+			document.getElementById("output").lastChild
+				.scrollIntoView();
+			document.getElementById("output").scrollIntoView(false);
+			return false;
+		}
+	}
+  </script>
+ </head>
+ 
+ <body>
+  <div id="output"></div>
+  <form id="input-form">
+   <input id="input" autofocus><input id="submit" type="submit" value="Do it">
+  </form>
+ </body>
+</html>
