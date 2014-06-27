@@ -576,6 +576,17 @@ jaiffa.VerbObjectParser.prototype = {
 				return;
 			else if (!this.handle_exit(verb, player))
 				say("I don't know how.");
+		} else if (words.length == 3) {
+			var verb = words.join("_");
+			var action = "$" + verb;
+			if (jaiffa.handle_action(this.story, action, player)) {
+				return;
+			} else {
+				var verb = words[0] + "_" + words[1];
+				var action = "$" + verb;
+				var target = this.pick_target(words.slice(2));
+				this.handle_sentence(target, verb, player);
+			}
 		} else if (words.length == 2) {
 			var verb = words.join("_");
 			var action = "$" + verb;
